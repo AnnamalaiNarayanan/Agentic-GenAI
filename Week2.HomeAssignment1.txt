@@ -1,0 +1,206 @@
+Prompt: 
+
+Instruction:
+============
+convert this plain selenium code to playwright typescript
+Selenium code: package week2.day1;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.Select;
+
+public class CreateLead {
+
+	public static void main(String[] args) {
+		//Launch the browser
+		ChromeDriver driver = new ChromeDriver();
+		
+		//Load the url
+		driver.get("http://leaftaps.com/opentaps");
+		
+		//Maximize the window
+		driver.manage().window().maximize();
+		
+		
+		//Locate the WebElement for username field.
+		WebElement usernameField = driver.findElement(By.id("username"));
+		//Enter the username into the field as demosalesmanager , use a method sendKeys()
+		usernameField.sendKeys("Demosalesmanager");
+		
+		//Locate the password field
+//		driver.findElement(By.className("inputLogin")).sendKeys("crmsfa"); // Class with duplicate
+		driver.findElement(By.name("PASSWORD")).sendKeys("crmsfa");
+		
+		driver.findElement(By.className("decorativeSubmit")).click();
+	
+		//Locate and click on the CRMSFA link
+		
+		driver.findElement(By.partialLinkText("CRM/SFA")).click();
+		
+		//Locate and click on Leads tab
+		driver.findElement(By.linkText("Leads")).click();
+		
+		//Locate and click on the Create lead from shortcut menu
+		driver.findElement(By.linkText("Create Lead")).click();
+		
+		//Locate the company field and enter as TestLeaf
+		driver.findElement(By.id("createLeadForm_companyName")).sendKeys("TestLeaf");
+		
+		//Locate and enter first name as Gokul
+		driver.findElement(By.id("createLeadForm_firstName")).sendKeys("Gokul");
+		
+		
+		//Locate the Source WebElement (Dropdown)
+		//step 1: Locate the dropdown WebElement
+		WebElement sourceWE = driver.findElement(By.id("createLeadForm_dataSourceId"));
+		//Step 2: Create a object for Select class and pass WebElement inside the Constrctor
+		Select sourceDD = new Select(sourceWE);
+		//step 3: Select the value
+		sourceDD.selectByIndex(4); //Index starts from zero
+		
+		
+		//Locate the Industry and choose computer software
+		WebElement industryWE = driver.findElement(By.id("createLeadForm_industryEnumId"));
+		Select industryDD = new Select(industryWE);
+		industryDD.selectByVisibleText("Computer Software");
+		
+		//Locate the ownership 
+		WebElement ownershipWE = driver.findElement(By.id("createLeadForm_ownershipEnumId"));
+		Select ownershipDD = new Select(ownershipWE);
+		ownershipDD.selectByValue("OWN_PARTNERSHIP");
+		
+		
+		
+		
+		//Loctae and enter the last name as Sekar
+		driver.findElement(By.id("createLeadForm_lastName")).sendKeys("Sekar");
+		
+		//Locate and click on the create lead button.
+		driver.findElement(By.className("smallSubmit")).click();
+		
+		//Get the Lead ID
+		String leadId = driver.findElement(By.id("viewLead_companyName_sp")).getText();
+		System.out.println("Lead Id "+leadId);
+		
+		System.out.println(driver.getTitle());
+		
+		//close the window
+		driver.close();
+	}
+	
+}
+Context:
+=========
+    [Mandatory] Should be clean code with playwright and typescript language
+   [critical] use comment lines for the better readability
+    [Mandatory] use the parsing arguments separately
+   [critical] Use proper naming convention
+   [mandatory] use the locators appropriately
+ Not needed explanation about the code 
+
+
+Example:
+========
+ - example Output for Prompt above
+import { test, expect } from '@playwright/test';
+
+test('Create Lead in Leaftaps', async ({ page }) => {
+  // Step 1: Load the URL
+  await page.goto('http://leaftaps.com/opentaps/control/main');
+  await page.setViewportSize({ width: 1600, height: 900 });
+
+  // Step 2: Login
+  await page.locator('#username').fill('DemoSalesManager');
+  await page.locator('#password').fill('crmsfa');
+  await page.locator('.decorativeSubmit').click();
+
+  // Step 3: Verify the title
+  const title = await page.title();
+  console.log('Page Title after login:', title);
+  await expect(page).toHaveTitle(/Leaftaps/);
+
+  // Step 4: Navigate to CRM/SFA → Create Lead
+  await page.locator('text=CRM/SFA').click();
+  await page.locator('text=Create Lead').click();
+
+  // Step 5: Fill in the form
+  await page.locator('#createLeadForm_companyName').fill('TestLeaf');
+  await page.locator('#createLeadForm_firstName').fill('Babu');
+  await page.locator('#createLeadForm_lastName').fill('Manickam');
+
+  // Step 6: Select dropdowns
+  await page.locator('#createLeadForm_dataSourceId').selectOption({ label: 'Employee' });
+  await page.locator('#createLeadForm_marketingCampaignId').selectOption({ value: '9001' });
+
+  // Step 7: Submit form
+  await page.locator('input[name="submitButton"]').click();
+
+  // Step 8: Print the new title
+  const newTitle = await page.title();
+  console.log('Page Title after lead creation:', newTitle);
+
+  // Assert navigation happened
+  await expect(page).toHaveTitle(/View Lead/);
+});
+
+persona: Act as Senior software test engineer
+
+Prompt output:
+===============
+
+import { test, expect } from '@playwright/test';
+
+test('Create Lead in Leaftaps', async ({ page }) => {
+  // ---------- Step 1: Launch Application ----------
+  await page.goto('http://leaftaps.com/opentaps/control/main');
+  await page.setViewportSize({ width: 1600, height: 900 });
+
+  // ---------- Step 2: Login ----------
+  const usernameField = page.locator('#username');
+  const passwordField = page.locator('input[name="PASSWORD"]');
+  const loginButton = page.locator('.decorativeSubmit');
+
+  await usernameField.fill('Demosalesmanager');
+  await passwordField.fill('crmsfa');
+  await loginButton.click();
+
+  // ---------- Step 3: Navigate to CRM/SFA ----------
+  await page.locator('text=CRM/SFA').click();
+
+  // ---------- Step 4: Navigate to Leads → Create Lead ----------
+  await page.locator('text=Leads').click();
+  await page.locator('text=Create Lead').click();
+
+  // ---------- Step 5: Fill Lead Form ----------
+  const companyNameField = page.locator('#createLeadForm_companyName');
+  const firstNameField = page.locator('#createLeadForm_firstName');
+  const lastNameField = page.locator('#createLeadForm_lastName');
+  const sourceDropdown = page.locator('#createLeadForm_dataSourceId');
+  const industryDropdown = page.locator('#createLeadForm_industryEnumId');
+  const ownershipDropdown = page.locator('#createLeadForm_ownershipEnumId');
+
+  await companyNameField.fill('TestLeaf');
+  await firstNameField.fill('Gokul');
+  await lastNameField.fill('Sekar');
+
+  await sourceDropdown.selectOption({ index: 4 });
+  await industryDropdown.selectOption({ label: 'Computer Software' });
+  await ownershipDropdown.selectOption({ value: 'OWN_PARTNERSHIP' });
+
+  // ---------- Step 6: Submit Lead ----------
+  await page.locator('.smallSubmit').click();
+
+  // ---------- Step 7: Capture Lead ID ----------
+  const leadId = await page.locator('#viewLead_companyName_sp').innerText();
+  console.log('Lead Id:', leadId);
+
+  // ---------- Step 8: Validate Page Title ----------
+  const pageTitle = await page.title();
+  console.log('Page Title:', pageTitle);
+  await expect(page).toHaveTitle(/View Lead/);
+
+  // ---------- Step 9: Close Browser ----------
+  await page.close();
+});
+
