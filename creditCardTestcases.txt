@@ -1,0 +1,55 @@
+Credit card manual test cases:
+================
+
+Prompt input:
+========
+Create manual test cases for the credit card Application
+
+[Mandatory] cover the Positive Negative and edge cases
+[critical] No duplicate test cases for better maintainability
+[Mandatory] split the smoke sanity and regression scenarios separately
+ Add the expected results and actual results in the tabular column
+[Mandatory] Include fraud detection scenarios as well
+
+Example output: 
+Test case ID | Test description|Test steps|Card Holder Name| Card Number| cvv | Type of cases| Comments| Tester
+
+Persona: Act as end user and create test cases
+Tone: As this is critical functionality  if did not cover test cases properly leads to financial crisis
+ output: Please give the results in tabular column
+
+
+Persona: Act as end user 
+
+Prompt output:
+============
+
+Here’s a structured **manual test case document** for a **Credit Card Application** aligned to your requirements.
+I’ve separated **Smoke, Sanity, Regression**, covered **Positive, Negative, Edge cases**, and included **Fraud detection scenarios**.
+
+---
+
+### Credit Card Application – Manual Test Cases
+
+| Test Case ID | Test Description                                                    | Test Steps                                                                                               | Card Holder Name | Card Number                                           | CVV   | Type of Cases                     | Expected Result                                         | Actual Result | Comments                       | Tester   |
+| ------------ | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------- | ----------------------------------------------------- | ----- | --------------------------------- | ------------------------------------------------------- | ------------- | ------------------------------ | -------- |
+| SMK-001      | Verify login with valid credit card credentials                     | 1. Enter valid Card Holder Name <br> 2. Enter valid Card Number <br> 3. Enter valid CVV <br> 4. Submit   | John Doe         | 4111111111111111                                      | 123   | Smoke (Positive)                  | User successfully logged in and redirected to dashboard | Pass/Fail     | Core authentication flow       | Tester A |
+| SMK-002      | Verify login fails with invalid CVV                                 | 1. Enter valid Card Holder Name <br> 2. Enter valid Card Number <br> 3. Enter invalid CVV <br> 4. Submit | John Doe         | 4111111111111111                                      | 999   | Smoke (Negative)                  | Error message displayed: “Invalid CVV”                  | Pass/Fail     | Basic invalid credential check | Tester A |
+| SNT-001      | Verify card number cannot be left blank                             | 1. Enter valid Card Holder Name <br> 2. Leave Card Number blank <br> 3. Enter CVV <br> 4. Submit         | Jane Doe         | *Blank*                                               | 456   | Sanity (Negative)                 | System should prompt: “Card Number is required”         | Pass/Fail     | Mandatory field validation     | Tester B |
+| SNT-002      | Verify CVV field accepts only 3 digits                              | 1. Enter valid Card Holder Name <br> 2. Enter valid Card Number <br> 3. Enter 2-digit CVV <br> 4. Submit | Jane Doe         | 5555555555554444                                      | 12    | Sanity (Edge)                     | Error: “CVV must be 3 digits”                           | Pass/Fail     | Boundary condition check       | Tester B |
+| REG-001      | Verify system accepts different card providers (Visa, Master, Amex) | 1. Enter valid details for each card type <br> 2. Submit                                                 | John Smith       | 4111111111111111 / 5555555555554444 / 378282246310005 | 123   | Regression (Positive)             | All valid card types accepted                           | Pass/Fail     | Card type coverage             | Tester C |
+| REG-002      | Verify expired card cannot be used                                  | 1. Enter expired card details <br> 2. Submit                                                             | Mark Lee         | 6011000990139424                                      | 321   | Regression (Negative)             | Error: “Card expired”                                   | Pass/Fail     | Expiry validation              | Tester C |
+| REG-003      | Verify multiple failed login attempts trigger fraud detection lock  | 1. Enter invalid CVV 3 times consecutively <br> 2. Submit                                                | David Ray        | 4111111111111111                                      | Wrong | Regression (Fraud Detection)      | Account locked and flagged for fraud                    | Pass/Fail     | Fraud prevention               | Tester D |
+| REG-004      | Verify duplicate card application is blocked                        | 1. Apply for new card with existing cardholder details <br> 2. Submit                                    | Alice Wong       | 4111111111111111                                      | 123   | Regression (Fraud Detection)      | System should block duplicate application               | Pass/Fail     | Avoid multiple card misuse     | Tester D |
+| REG-005      | Verify system detects stolen card usage                             | 1. Use card number from blacklist (fraud database) <br> 2. Submit                                        | Unknown          | 4000000000000002                                      | 555   | Regression (Fraud Detection)      | Transaction declined with fraud alert                   | Pass/Fail     | Critical fraud check           | Tester D |
+| REG-006      | Verify high-value transaction triggers OTP verification             | 1. Enter valid card details <br> 2. Attempt purchase > ₹1,00,000 <br> 3. Submit                          | John Doe         | 5105105105105100                                      | 456   | Regression (Edge/Fraud Detection) | OTP sent to registered mobile/email                     | Pass/Fail     | High-value risk prevention     | Tester E |
+
+---
+
+✅ **Smoke Tests**: SMK-001 to SMK-002 (basic login/authentication flow)
+✅ **Sanity Tests**: SNT-001 to SNT-002 (mandatory field + validation checks)
+✅ **Regression Tests**: REG-001 to REG-006 (full flow + fraud + edge scenarios)
+
+---
+
+Do you want me to **expand this table with 20+ more cases** (covering transactions, refunds, EMI, chargeback, international payments, etc.) or keep it focused on **application login and fraud detection only**?
