@@ -1,0 +1,48 @@
+Request API Prompt: 
+==============
+
+{
+    "model":"meta-llama/llama-4-maverick-17b-128e-instruct",
+
+  "messages": [
+    {
+      "role": "user",
+      "content": "create a playwright typescript code from the given sample selenium code. public class CreateLead { public static void main(String[] args) { //Launch the browser ChromeDriver driver = new ChromeDriver(); //Load the url driver.get("//http://leaftaps.com/opentaps"); //Maximize the window driver.manage().window().maximize(); //Locate the WebElement for username field. WebElement usernameField = driver.findElement(By.id("username")); //Enter the username into the field as demosalesmanager , use a method sendKeys() usernameField.sendKeys("Demosalesmanager"); //Locate the password field // driver.findElement(By.className("inputLogin")).sendKeys("crmsfa"); // Class with duplicate driver.findElement(By.name("PASSWORD")).sendKeys("crmsfa"); driver.findElement(By.className("decorativeSubmit")).click(); //Locate and click on the CRMSFA link driver.findElement(By.partialLinkText("CRM/SFA")).click(); //Locate and click on Leads tab driver.findElement(By.linkText("Leads")).click(); //Locate and click on the Create lead from shortcut menu driver.findElement(By.linkText("Create Lead")).click(); //Locate the company field and enter as TestLeaf driver.findElement(By.id("createLeadForm_companyName")).sendKeys("TestLeaf"); //Locate and enter first name as Gokul driver.findElement(By.id("createLeadForm_firstName")).sendKeys("Gokul"); //Locate the Source WebElement (Dropdown) //step 1: Locate the dropdown WebElement WebElement sourceWE = driver.findElement(By.id("createLeadForm_dataSourceId")); //Step 2: Create a object for Select class and pass WebElement inside the Constrctor Select sourceDD = new Select(sourceWE); //step 3: Select the value sourceDD.selectByIndex(4); //Index starts from zero //Locate the Industry and choose computer software WebElement industryWE = driver.findElement(By.id("createLeadForm_industryEnumId")); Select industryDD = new Select(industryWE); industryDD.selectByVisibleText("Computer Software"); //Locate the ownership WebElement ownershipWE = driver.findElement(By.id("createLeadForm_ownershipEnumId")); Select ownershipDD = new Select(ownershipWE); ownershipDD.selectByValue("OWN_PARTNERSHIP"); //Loctae and enter the last name as Sekar driver.findElement(By.id("createLeadForm_lastName")).sendKeys("Sekar"); //Locate and click on the create lead button. driver.findElement(By.className("smallSubmit")).click(); //Get the Lead ID String leadId = driver.findElement(By.id("viewLead_companyName_sp")).getText(); System.out.println("Lead Id "+leadId); System.out.println(driver.getTitle()); //close the window driver.close(); }  [Mandatory] Should be clean code with playwright and typescript language[critical] use comment lines for the better readability[Mandatory] use the parsing arguments separately[critical] Use proper naming convention[mandatory] use the locators appropriatelyNot needed explanation about the code }- example Output for Prompt above import { test, expect } from '@playwright/test';test('Create Lead in Leaftaps', async ({ page }) => {// Step 1: Load the URLawait page.goto('http://leaftaps.com/opentaps/control/main');await page.setViewportSize({ width: 1600, height: 900 });// Step 2: Login await page.locator('#username').fill('DemoSalesManager');await page.locator('#password').fill('crmsfa');  await page.locator('.decorativeSubmit').click();  // Step 3: Verify the titleconst title = await page.title();console.log('Page Title after login:', title);await expect(page).toHaveTitle(/Leaftaps/);// Step 4: Navigate to CRM/SFA → Create Leadawait page.locator('text=CRM/SFA').click();await page.locator('text=Create Lead').click();// Step 5: Fill in the formawait page.locator('#createLeadForm_companyName').fill('TestLeaf');await page.locator('#createLeadForm_firstName').fill('Babu');await page.locator('#createLeadForm_lastName').fill('Manickam');// Step 6: Select dropdownsawait page.locator('#createLeadForm_dataSourceId').selectOption({ label: 'Employee' });await page.locator('#createLeadForm_marketingCampaignId').selectOption({ value: '9001' });// Step 7: Submit formawait page.locator('input[name="submitButton"]').click();// Step 8: Print the new titleconst newTitle = await page.title();console.log('Page Title after lead creation:', newTitle);// Assert navigation happenedawait expect(page).toHaveTitle(/View Lead/);});persona: Act as Senior software test engineer"
+    }
+  ]
+}
+
+Response:
+==========
+{
+    "id": "chatcmpl-18f13bd5-ac89-40ea-8c50-deb324cce51e",
+    "object": "chat.completion",
+    "created": 1757423534,
+    "model": "meta-llama/llama-4-maverick-17b-128e-instruct",
+    "choices": [
+        {
+            "index": 0,
+            "message": {
+                "role": "assistant",
+                "content": "To convert the given Selenium Java code to Playwright TypeScript, we need to understand the basic operations performed by the Selenium code and then map those operations to their equivalents in Playwright. The given Selenium code snippet seems to be launching a Chrome browser and navigating to a specified URL.\n\nHere's how you can write the equivalent code using Playwright in TypeScript:\n\n1. **Install Playwright**: First, ensure you have Playwright installed in your project. If not, you can install it by running:\n   ```bash\n   npm i -D playwright\n   ```\n\n2. **Sample Playwright Code**: Now, let's write the TypeScript code that does the equivalent of launching Chrome and navigating to a URL.\n\n   ```typescript\n   // File: create-lead.spec.ts\n\n   import { chromium } from 'playwright'; // You can use 'chromium', 'webkit', or 'firefox'\n\n   (async () => {\n     // Launch the browser\n     const browser = await chromium.launch({\n       headless: false, // Set to true if you want to run in headless mode\n     });\n     const context = await browser.newContext();\n     const page = await context.newPage();\n\n     // Load the URL\n     await page.goto('https://example.com'); // Replace 'https://example.com' with your desired URL\n\n     // You can add more interactions here, e.g., filling out forms, clicking buttons\n\n     // Keep the browser open\n     // await page.pause();\n\n     // Close the browser\n     await browser.close();\n   })();\n   ```\n\n3. **Running the Code**: To run this TypeScript code, you need to ensure that you have TypeScript configured properly in your project. If you haven't set up TypeScript yet, you can do so by installing it:\n   ```bash\n   npm i -D typescript @types/node\n   ```\n\n   You will also need a `tsconfig.json` file configured for your project. Here's a basic example:\n   ```json\n   {\n     \"compilerOptions\": {\n       \"target\": \"es6\",\n       \"module\": \"commonjs\",\n       \"outDir\": \"./dist\",\n       \"rootDir\": \"./\",\n       \"strict\": true,\n       \"esModuleInterop\": true\n     }\n   }\n   ```\n\n   Compile your TypeScript to JavaScript by running:\n   ```bash\n   npx tsc\n   ```\n\n   Then, execute the compiled JavaScript:\n   ```bash\n   node dist/create-lead.spec.js\n   ```\n\n4. **Alternative: Using `ts-node`**: As an alternative to manually compiling TypeScript, you can use `ts-node` to run your TypeScript files directly:\n   ```bash\n   npm i -D ts-node\n   ```\n\n   Then, run your TypeScript file with:\n   ```bash\n   npx ts-node create-lead.spec.ts\n   ```\n\nThis Playwright TypeScript code launches Chromium (you can switch to other browsers supported by Playwright like Firefox or WebKit), navigates to a specified URL, and provides a foundation for further interactions with the webpage."
+            },
+            "logprobs": null,
+            "finish_reason": "stop"
+        }
+    ],
+    "usage": {
+        "queue_time": 1.005703084,
+        "prompt_tokens": 55,
+        "prompt_time": 0.001854284,
+        "completion_tokens": 634,
+        "completion_time": 0.97340877,
+        "total_tokens": 689,
+        "total_time": 0.975263054
+    },
+    "usage_breakdown": null,
+    "system_fingerprint": "fp_c527aa4474",
+    "x_groq": {
+        "id": "req_01k4q9ny8mf1rryfmcrf0escry"
+    },
+    "service_tier": "on_demand"
+}
